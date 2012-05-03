@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+    {% block head %}
+        <title>MindSnacks - Sonar</title>
+        <script type="text/javascript" src="http://use.typekit.com/obd6kdk.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='master.css') }}" type="text/css" media="screen" charset="utf-8">
+    {% endblock %}
+    </head>
+    <body>
+        <div class='inner'>
+            <div id="header" class='clearfix'>
+                <div id="logo" class="left">
+                    <h1 class='tk-museo-slab'>{% block title %}{% endblock %}&nbsp;<span class='tagline'>{% block tagline %}{% endblock %}</span></h1>
+                </div>
+                <div class='right'>
+                    <p>{% block link_back %}{% endblock %}</p>
+                </div>
+            </div>
+        </div>
+        <div class='inner-wide'>
+        </div>
+        <div class='inner'>
+            <div id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <div id="footer">
+                {% block footer %}
+                    <h2 class='tk-museo-slab'>Want to add something?</h2>
+                    <p>Check out the source on <a href='http://github.com/mindsnacks/sonar'>Github</a></p>
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>
+

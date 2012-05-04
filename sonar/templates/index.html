@@ -4,6 +4,28 @@
 
 {% block tagline %}sonar{% endblock %}
 
+{% block scripts %}
+  <script type="text/javascript" src="{{ url_for('static', filename='isotope.js') }}"></script>
+  <script type="text/javascript" src="http://localhost:8080/application.js"></script>
+  <script type="text/javascript">
+    var jug = new Juggernaut();
+    jug.subscribe('channel', function(data) {
+      alert('Got message: ' + data);
+    });
+</script>
+{% endblock %}
+
+{% block bottom_scripts %}
+  <script type="text/javascript">
+    window.onload = function() {
+      $("#items").isotope({
+          itemSelector: '.item',
+          layoutMode: 'fitRows'
+      });
+    };
+  </script>
+{% endblock %}
+
 {% block link_back %}
 <a href='http://mindsnacks.com'>Go back to MindSnacks</a>
 {% endblock %}
@@ -14,6 +36,10 @@
 {% endblock %}
 
 {% block content %}
-<div class='updates'>
-</div>
+  <div id="items" class='isotope'>
+    <div class='item text-item'>
+    </div>
+    <div class='item text-item'>
+    </div>
+  </div>
 {% endblock %}

@@ -1,1 +1,1 @@
-web: python sonar/application.py
+web: python sonar/sonar.py

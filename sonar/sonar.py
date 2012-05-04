@@ -95,7 +95,6 @@ def update_tweets():
                 )
         # last tweet is new
         if tweet.exists_in(redis) is False:
-            tweet.save(redis)
             old_tweet = TwitterItem(username)
             if old_tweet.exists_in(redis):
                 old_tweet.update(redis)
@@ -105,6 +104,7 @@ def update_tweets():
             else:
                 # just notify client tweet has been added
                 jug.publish('channel', tweet.text)
+            tweet.save(redis)
 
 def populate_redis():
     twitter_usernames = ('mindsnacks', 'mindsnacksfood')

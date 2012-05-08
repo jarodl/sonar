@@ -1,10 +1,10 @@
 import os
 import json
-from flask import Flask, g, session
+from flask import Flask, g, session, jsonify
 from flask import render_template, redirect, url_for, request
+from flask.ext.celery import Celery
 from gevent.pywsgi import WSGIServer
 from juggernaut import Juggernaut
-from flask.ext.celery import Celery
 from twitter import api
 from redis import Redis
 
@@ -88,6 +88,11 @@ def update_tweets():
     twitter_usernames = redis.smembers('twitter_usernames')
     for username in twitter_usernames:
         last_tweet = last_tweet_by(username)
+        # last_tweet = {
+        #         'id': '123123123',
+        #         'user' : {'profile_image_url': 'http://test.com/home.png'},
+        #         'text': 'This is a test'
+        #         };
         tweet = TwitterItem(
                 username,
                 str(last_tweet['id']),
@@ -117,8 +122,18 @@ def populate_redis():
 @app.route('/')
 def sonar():
     populate_redis()
-    update()
     return render_template('index.html')
+
+@app.route('/twitter-items')
+def twitter_items():
+    twitter_usernames = redis.smembers('twitter_usernames')
+    tweets = []
+    for username in twitter_usernames:
+        tweet = TwitterItem(username)
+        tweet.update(redis)
+        tweets.append(tweet)
+    tweets = [tweet.__dict__ for tweet in tweets]
+    return jsonify(twitter_items=tweets)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

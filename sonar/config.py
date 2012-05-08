@@ -5,9 +5,9 @@ CELERY_REDIS_HOST = "localhost"
 CELERY_REDIS_PORT = 6379
 CELERY_REDIS_DB = 0
 CELERYBEAT_SCHEDULE = {
-    "runs-every-30-seconds": {
+    "runs-every-5-seconds": {
         "task": "sonar.update",
-        "schedule": timedelta(seconds=30)
+        "schedule": timedelta(seconds=5)
     },
 }
 

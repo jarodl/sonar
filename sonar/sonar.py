@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, g, session
 from flask import render_template, redirect, url_for, request
 from gevent.pywsgi import WSGIServer
@@ -99,14 +100,16 @@ def update_tweets():
             if old_tweet.exists_in(redis):
                 old_tweet.update(redis)
                 # notify client that tweet replaced old_tweet
-                old_tweet.delete(redis)
-                jug.publish('channel', tweet.text)
+                # old_tweet.delete(redis)
+                jug.publish('tweet-channel', tweet.text)
             else:
                 # just notify client tweet has been added
-                jug.publish('channel', tweet.text)
+                jug.publish('tweet-channel', tweet.text)
             tweet.save(redis)
+        jug.publish('tweet-channel', tweet.__dict__)
 
 def populate_redis():
+    # pull this from config
     twitter_usernames = ('mindsnacks', 'mindsnacksfood')
     for username in twitter_usernames:
         redis.sadd('twitter_usernames', username)

@@ -5,8 +5,8 @@
         <title>MindSnacks - Sonar</title>
         <script type="text/javascript" src="http://use.typekit.com/obd6kdk.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-        <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
-        <link rel="stylesheet" href="{{ url_for('static', filename='master.css') }}" type="text/css" media="screen" charset="utf-8">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/master.css') }}" type="text/css" media="screen" charset="utf-8">
     {% endblock %}
     {% block scripts %}
     {% endblock %}
@@ -37,6 +37,8 @@
             </div>
         </div>
         {% block bottom_scripts %}
+        {% endblock %}
+        {% block templates %}
         {% endblock %}
     </body>
 </html>

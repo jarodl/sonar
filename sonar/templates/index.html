@@ -5,25 +5,11 @@
 {% block tagline %}sonar{% endblock %}
 
 {% block scripts %}
-  <script type="text/javascript" src="{{ url_for('static', filename='isotope.js') }}"></script>
-  <script type="text/javascript" src="http://localhost:8080/application.js"></script>
-  <script type="text/javascript">
-    var jug = new Juggernaut();
-    jug.subscribe('channel', function(data) {
-      alert('Got message: ' + data);
-    });
-</script>
-{% endblock %}
-
-{% block bottom_scripts %}
-  <script type="text/javascript">
-    window.onload = function() {
-      $("#items").isotope({
-          itemSelector: '.item',
-          layoutMode: 'fitRows'
-      });
-    };
-  </script>
+<script type="text/javascript" src="http://localhost:8080/application.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/underscore.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/backbone.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/isotope.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/sonar.js') }}"></script>
 {% endblock %}
 
 {% block link_back %}
@@ -36,10 +22,15 @@
 {% endblock %}
 
 {% block content %}
-  <div id="items" class='isotope'>
-    <div class='item text-item'>
-    </div>
-    <div class='item text-item'>
-    </div>
+<div id="sonar">
+  <div id="items">
   </div>
+</div>
+{% endblock %}
+
+{% block templates %}
+<script type="text/template" id="twitter-item">
+  <img src="<%= image_url %>" />
+  <p><%= text %></p>
+</script>
 {% endblock %}

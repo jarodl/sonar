@@ -1,8 +1,10 @@
 import os
 import json
-from flask import Flask, g, session, jsonify
+
+from flask import Flask, jsonify
 from flask import render_template, redirect, url_for, request
 from flask.ext.celery import Celery
+
 from gevent.pywsgi import WSGIServer
 from juggernaut import Juggernaut
 

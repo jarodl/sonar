@@ -2,7 +2,6 @@
 """
 from redis import Redis
 
-
 class Item(object):
     _redis = Redis()
 

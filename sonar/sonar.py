@@ -33,7 +33,7 @@ def update_tweets():
 
 def populate_redis():
     # pull this from config
-    twitter_usernames = ('mindsnacks', 'mindsnacksfood')
+    twitter_usernames = ('mindsnacks', 'mindsnacksfood', 'jarodltest')
     for username in twitter_usernames:
         TwitterItem(username)
 
@@ -42,7 +42,7 @@ def sonar():
     populate_redis()
     return render_template('index.html')
 
-@app.route('/twitter-items')
+@app.route('/twitter/latest.json')
 def twitter_items():
     tweets = TwitterItem.all()
     tweets = [tweet.__dict__ for tweet in tweets]

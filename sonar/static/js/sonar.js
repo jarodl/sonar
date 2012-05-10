@@ -1,45 +1,27 @@
 $(function(){
 
     var Item = Backbone.Model.extend({
-        defaults: function() {
-            return {
-                ident: ""
-            };
-        },
+        set: function(attributes, options) {
+            attributes['id'] = attributes['ident'];
+            Backbone.Model.prototype.set.call(this, attributes, options);
+        }
     });
 
     var TwitterItem = Item.extend({
-        defaults: function() {
-            return {
-                object_id: "",
-                image_url: "",
-                text: ""
-            };
-        },
-
-        // initialize: function(object_id, image_url, text) {
-        //     this.set({
-        //         "object_id": object_id, 
-        //         "image_url": image_url,
-        //         "text": text
-        //     });
-        // }
     });
 
     var ItemView = Backbone.View.extend({
         tagName: "div",
     });
 
-    var TwitterItemView = Backbone.View.extend({
-
-        tagName: "div",
-
+    var TwitterItemView = ItemView.extend({
         className: "twitter-item item",
 
         template: _.template($('#twitter-item').html()),
 
         initialize: function() {
             this.model.bind('change', this.render, this);
+            this.model.bind('destroy', this.remove, this);
         },
 
         render: function() {
@@ -51,7 +33,7 @@ $(function(){
     var ItemList = Backbone.Collection.extend({
         model: TwitterItem,
 
-        url: '/twitter-items',
+        url: '/twitter/latest.json',
 
         comparator: function(item) {
             return item.get('ident');
@@ -60,7 +42,6 @@ $(function(){
         parse: function(response) {
             return response.twitter_items;
         }
-
     });
 
     var TwitterItems = new ItemList;
@@ -83,8 +64,14 @@ $(function(){
         },
 
         addTwitterItem: function(tweet) {
-            var item = new TwitterItem(tweet);
-            TwitterItems.create(item);
+            var item = TwitterItems.get(tweet['ident']);
+            if (!item) {
+                item = new TwitterItem(tweet);
+                TwitterItems.create(item);
+            }
+            else {
+                item.set(tweet);
+            }
         },
 
         addTwitterItemToView: function(item) {

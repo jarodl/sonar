@@ -25,7 +25,7 @@ class Item(object):
 
     @classmethod
     def exists(cls, item):
-        pass
+        return cls._redis.get(item.redis_key) is not None
 
     def make_key(self, *args):
         """
@@ -63,9 +63,6 @@ class Item(object):
         for attr in self.__dict__.keys():
             key = self.make_key(self.redis_key, attr)
             Item._redis.delete(key)
-
-    def exists_in(self, redis):
-        return Item._redis.get(self.redis_key) is not None
 
 class TwitterItem(Item):
 

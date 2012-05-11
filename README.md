@@ -17,6 +17,8 @@ Add an `update` in `sonar.py` and schedule its frequency with celery.
 
 ##### Step 3:
 
+	TODO: This should probably just be sent as a signal directly from the instance on save
+
 Publish to a juggernaut channel when the item is updated.
 
 ##### Step 4:

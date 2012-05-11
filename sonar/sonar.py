@@ -8,7 +8,7 @@ from flask.ext.celery import Celery
 from gevent.pywsgi import WSGIServer
 from juggernaut import Juggernaut
 
-from models.models import LatestTweet
+from models.tweet import LatestTweet
 
 def create_app():
     return Flask(__name__)

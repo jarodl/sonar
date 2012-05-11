@@ -1,6 +1,5 @@
 import unittest
 from sonar.models.base import BaseItem
-from sonar.models.models import TwitterItem
 
 class BaseItemTests(unittest.TestCase):
 

@@ -8,7 +8,7 @@ from flask.ext.celery import Celery
 from gevent.pywsgi import WSGIServer
 from juggernaut import Juggernaut
 
-from models import TwitterItem
+from models.models import LatestTweet
 
 def create_app():
     return Flask(__name__)
@@ -25,7 +25,7 @@ def update():
     update_tweets()
 
 def update_tweets():
-    tweets = TwitterItem.all()
+    tweets = LatestTweet.all()
     for tweet in tweets:
         was_updated = tweet.fetch()
         if was_updated:
@@ -35,7 +35,9 @@ def populate_redis():
     # pull this from config
     twitter_usernames = ('mindsnacks', 'mindsnacksfood', 'jarodltest')
     for username in twitter_usernames:
-        TwitterItem(username)
+        tweet = LatestTweet(username)
+        tweet.fetch()
+        tweet.save()
 
 @app.route('/')
 def sonar():
@@ -43,10 +45,10 @@ def sonar():
     return render_template('index.html')
 
 @app.route('/twitter/latest.json')
-def twitter_items():
-    tweets = TwitterItem.all()
+def latest_tweets():
+    tweets = LatestTweet.all()
     tweets = [tweet.__dict__ for tweet in tweets]
-    return jsonify(twitter_items=tweets)
+    return jsonify(latest_tweets=tweets)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

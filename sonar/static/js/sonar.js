@@ -7,14 +7,14 @@ $(function(){
         }
     });
 
-    var TwitterItem = Item.extend({
+    var LatestTweet = Item.extend({
     });
 
     var ItemView = Backbone.View.extend({
         tagName: "div",
     });
 
-    var TwitterItemView = ItemView.extend({
+    var LatestTweetView = ItemView.extend({
         className: "twitter-item item",
 
         template: _.template($('#twitter-item').html()),
@@ -31,7 +31,7 @@ $(function(){
     });
 
     var ItemList = Backbone.Collection.extend({
-        model: TwitterItem,
+        model: LatestTweet,
 
         url: '/twitter/latest.json',
 
@@ -40,42 +40,42 @@ $(function(){
         },
 
         parse: function(response) {
-            return response.twitter_items;
+            return response.latest_tweets;
         }
     });
 
-    var TwitterItems = new ItemList;
+    var LatestTweets = new ItemList;
 
     var AppView = Backbone.View.extend({
         el: $('#sonar'),
 
         initialize: function() {
             this.jug = new Juggernaut();
-            this.jug.subscribe('tweet-channel', this.addTwitterItem);
+            this.jug.subscribe('tweet-channel', this.addLatestTweet);
 
-            TwitterItems.bind('add', this.addTwitterItemToView, this);
-            TwitterItems.bind('reset', this.addTwitterItems, this);
+            LatestTweets.bind('add', this.addLatestTweetToView, this);
+            LatestTweets.bind('reset', this.addLatestTweets, this);
 
-            TwitterItems.fetch();
+            LatestTweets.fetch();
         },
 
-        addTwitterItems: function() {
-            TwitterItems.each(this.addTwitterItemToView);
+        addLatestTweets: function() {
+            LatestTweets.each(this.addLatestTweetToView);
         },
 
-        addTwitterItem: function(tweet) {
-            var item = TwitterItems.get(tweet['ident']);
+        addLatestTweet: function(tweet) {
+            var item = LatestTweets.get(tweet['ident']);
             if (!item) {
-                item = new TwitterItem(tweet);
-                TwitterItems.create(item);
+                item = new LatestTweet(tweet);
+                LatestTweets.create(item);
             }
             else {
                 item.set(tweet);
             }
         },
 
-        addTwitterItemToView: function(item) {
-            var view = new TwitterItemView({
+        addLatestTweetToView: function(item) {
+            var view = new LatestTweetView({
                 model: item,
                 id: "tweet-" + item.get('ident')
             });

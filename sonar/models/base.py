@@ -56,8 +56,8 @@ class BaseItem(object):
         """
         Save all of the attributes to redis
         """
-        BaseItem._redis.set(self.redis_key, self.object_id)
         BaseItem._redis.sadd(self.name, self.ident)
+        BaseItem._redis.set(self.redis_key, self.object_id)
         for attr, value in self.__dict__.iteritems():
             key = self.make_key(self.redis_key, attr)
             BaseItem._redis.set(key, value)

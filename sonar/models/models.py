@@ -2,7 +2,7 @@
 """
 import base
 
-class TwitterItem(base.BaseItem):
+class LatestTweet(base.BaseItem):
 
     from twitter import api
     _api = api.Twitter()
@@ -10,12 +10,12 @@ class TwitterItem(base.BaseItem):
     def __init__(self, username, tweet_id=None, image_url='', text=''):
         self.image_url = image_url
         self.text = text
-        super(TwitterItem, self).__init__(username, tweet_id)
+        super(LatestTweet, self).__init__(username, tweet_id)
 
     def fetch(self):
         was_updated = False
 
-        last_tweet = TwitterItem._api.statuses.user_timeline(
+        last_tweet = LatestTweet._api.statuses.user_timeline(
                 screen_name=self.ident,
                 count=1,
                 include_rts=False)

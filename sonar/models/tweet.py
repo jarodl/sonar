@@ -1,10 +1,10 @@
 """
 """
 import base
+from twitter import api
 
 class LatestTweet(base.BaseItem):
 
-    from twitter import api
     _api = api.Twitter()
 
     def __init__(self, username, tweet_id=None, image_url='', text=''):

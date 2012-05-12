@@ -10,6 +10,8 @@ from juggernaut import Juggernaut
 
 from models.tweet import LatestTweet
 
+from instagram import subscriptions
+
 def create_app():
     return Flask(__name__)
 
@@ -19,6 +21,8 @@ app.config.from_pyfile("config.py")
 
 jug = Juggernaut()
 celery = Celery(app)
+instagram_reactor = subscriptions.SubscriptionsReactor()
+instagram_reactor.register_callback(subscriptions.SubscriptionType.LOCATION, instagram_location_update)
 
 @celery.task(name="sonar.update")
 def update():
@@ -30,6 +34,9 @@ def update_tweets():
         was_updated = tweet.fetch()
         if was_updated:
             jug.publish('tweet-channel', tweet.__dict__)
+            
+def instagram_location_update():
+    jug.publish('instagram-channel', instagram_photo.__dict__)
 
 def populate_redis():
     # pull this from config
@@ -38,6 +45,10 @@ def populate_redis():
         tweet = LatestTweet(username)
         tweet.fetch()
         tweet.save()
+        
+"""
+Routes
+"""
 
 @app.route('/')
 def sonar():
@@ -49,6 +60,10 @@ def latest_tweets():
     tweets = LatestTweet.all()
     tweets = [tweet.__dict__ for tweet in tweets]
     return jsonify(latest_tweets=tweets)
+    
+@app.route('/instagram/location_callback')
+def instagram_location_callback():
+    pass
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

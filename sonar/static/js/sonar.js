@@ -7,18 +7,12 @@ $(function(){
         }
     });
 
-    var LatestTweet = Item.extend({
-    });
+    var LatestTweet = Item.extend({});
+	var InstagramPhoto = Item.extend({});
 
     var ItemView = Backbone.View.extend({
         tagName: "div",
-    });
-
-    var LatestTweetView = ItemView.extend({
-        className: "twitter-item item",
-
-        template: _.template($('#twitter-item').html()),
-
+		
         initialize: function() {
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
@@ -30,10 +24,18 @@ $(function(){
         },
     });
 
-    var ItemList = Backbone.Collection.extend({
-        model: LatestTweet,
+    var LatestTweetView = ItemView.extend({
+        className: "twitter-item item",
+        template: _.template($('#twitter-item').html()),
+    });
+	
+	var InstagramPhotoView = ItemView.extend({
+		className: "instagram-item item",
+		template: _.template($('#instagram-item').html()),
+	});
 
-        url: '/twitter/latest.json',
+    var ItemList = Backbone.Collection.extend({
+        model: Item,
 
         comparator: function(item) {
             return item.get('ident');
@@ -43,8 +45,16 @@ $(function(){
             return response.latest_tweets;
         }
     });
+	
+	var TweetList = ItemList.extend({
+		url: '/twitter/latest.json'
+	});
+	
+	var InstagramList = ItemList.extend({
+		url: '/instagram/latest.json'		
+	});
 
-    var LatestTweets = new ItemList;
+    var LatestTweets = new TweetList;
 
     var AppView = Backbone.View.extend({
         el: $('#sonar'),
